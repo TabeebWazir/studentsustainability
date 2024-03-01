@@ -527,14 +527,12 @@ app.get("/profile", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-
+  if (req.session) {
+    req.session = null;
     res.redirect("/");
-  });
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.post("/submit", upload.single("image"), (req, res) => {
