@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/47800a03-57a3-4990-9454-d4d9cedf06ed/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/studentmarketport",
+  "appService.deploySubpath": "."
+}

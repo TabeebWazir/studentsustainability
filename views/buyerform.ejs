@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buyer Form</title>
+  </head>
+  <body>
+    <% if (isLoggedIn) { %> <% users.forEach(user => { %>
+    <strong>Item Name:</strong> <%= user.name %><br />
+    <strong>Buyer Name:</strong> <%= user.buyername %><br />
+    <strong>Buyer Email:</strong> <%= user.buyeremail %><br />
+    <strong>Buyer Price:</strong> <%= user.buyerprice %><br />
+    <% }) %> <% } %>
+  </body>
+</html>

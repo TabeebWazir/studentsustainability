@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="profile-body">
+    <header class="header">
+      <div class="header-search">
+        <h1 class="header-title">S3</h1>
+      </div>
+
+      <nav class="nav-box">
+        <a href="/">Home</a>
+        <% if (isLoggedIn) { %>
+        <a href="/inventory">Inventory</a>
+        <a class="active" href="/profile">Profile</a>
+        <% } %> <% if (!isLoggedIn) { %>
+        <a class="active" href="/login">Login</a>
+        <% } %>
+      </nav>
+    </header>
+
+    <main class="profile-main">
+      <div class="profile-image-box">
+        <% if (yourimage) { %>
+        <a href="/profile"
+          ><img
+            src="/uploads/<%= yourimage %>"
+            alt="Profile Image"
+            class="profile-image"
+        /></a>
+        <% } else { %>
+        <img
+          class="profile-image"
+          src="/dimage.jpg"
+          alt="Default Profile Image"
+        />
+        <% } %>
+      </div>
+
+      <div class="profile-info">
+        <h1 class="profile-name"><%= yourname %></h1>
+        <h2 class="profile-email"><%= youremail %></h2>
+
+        <form
+          id="image-upload-form"
+          action="/pimage"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="change-image">
+            Add photo
+            <input
+              class="hide-file"
+              id="image-upload"
+              type="file"
+              name="profile_image"
+              accept="image/*"
+            />
+          </div>
+        </form>
+
+        <a href="/changepassword">
+          <button class="login-register">Change Password</button>
+        </a>
+
+        <% if (isLoggedIn) { %>
+        <a href="/logout">
+          <button class="login-button">Logout</button>
+        </a>
+        <% } else { %>
+        <a href="/login">Login</a>
+        <% } %>
+      </div>
+    </main>
+
+    <script>
+      document
+        .getElementById("image-upload")
+        .addEventListener("change", function () {
+          document.getElementById("image-upload-form").submit();
+        });
+    </script>
+  </body>
+</html>

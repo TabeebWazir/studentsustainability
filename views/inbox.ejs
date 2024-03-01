@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inbox</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-search">
+        <h1 class="header-title">S3</h1>
+      </div>
+
+      <nav class="nav-box">
+        <a href="/">Home</a>
+        <% if (isLoggedIn) { %>
+        <a href="/inventory">Inventory</a>
+        <a class="active" href="/inbox">Inbox</a>
+        <% } %> <% if (!isLoggedIn) { %>
+        <a href="/login">Login</a>
+        <% } %>
+      </nav>
+    </header>
+
+    <main class="home-main">
+      <div class="outer-box">
+        <% if (isLoggedIn) { %> <% users.forEach(user => { %>
+        <div class="user-box">
+          <img
+            class="item_image"
+            src="/uploads/<%= user.image %>"
+            alt="image"
+          />
+          <h2><%= user.name %></h2>
+          <h1>$<%= user.price %></h1>
+
+          <div class="user_profile">
+            <div class="inner-pi">
+              <h1><%= user.buyername %></h1>
+              <h2><%= user.buyeremail %></h2>
+              <h1>Offer: $<%= user.buyerprice %></h1>
+              <a
+                href="https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faccounts.google.com%2F&followup=https%3A%2F%2Faccounts.google.com%2F&ifkv=ATuJsjyiLAckTfjVci1huY6sAWBonteH1tPnEhdmWaCihNwiOMh3-w0o_RcblxNjeIJ-qG2EIp4z3g&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S-1307897539%3A1708488631402166&theme=glif"
+                ><button class="login-button">Contact Buyer</button></a
+              >
+            </div>
+          </div>
+        </div>
+        <% }) %> <% } %>
+      </div>
+    </main>
+  </body>
+</html>

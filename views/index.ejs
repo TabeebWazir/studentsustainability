@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="home-body">
+    <header class="header">
+      <div class="header-search">
+        <h1 class="header-title">S3</h1>
+        <form class="search-form" action="/search" method="GET">
+          <input
+            class="search-input"
+            type="text"
+            name="query"
+            placeholder="Search..."
+          />
+          <button class="search-button" type="submit">Search</button>
+        </form>
+      </div>
+
+      <nav class="nav-box">
+        <a class="active" href="/">Home</a>
+        <% if (isLoggedIn) { %>
+        <a href="/inventory">Inventory</a>
+        <a href="/inbox">Inbox</a>
+        <% } %> <% if (!isLoggedIn) { %>
+        <a href="/login">Login</a>
+        <% } %>
+      </nav>
+
+      <% if (isLoggedIn) { %>
+
+      <div class="logged-user-image-box">
+        <% if (yourimage) { %>
+        <a href="/profile"
+          ><img
+            src="/uploads/<%= yourimage %>"
+            alt="Profile Image"
+            class="logged-user-image"
+        /></a>
+        <% } else { %>
+        <a href="/profile">
+          <img
+            class="logged-user-image"
+            src="/dimage.jpg"
+            alt="Default Profile Image"
+        /></a>
+        <% } %>
+      </div>
+
+      <% } %>
+    </header>
+
+    <% if (!(typeof searchQuery !== 'undefined' && searchQuery)) { %>
+    <main class="home-main">
+      <div class="outer-box">
+        <% users.forEach(user => { %>
+        <div class="user-box">
+          <img
+            class="item_image"
+            src="/uploads/<%= user.image %>"
+            alt="image"
+          />
+          <h2><%= user.name %></h2>
+          <h1>$<%= user.price %></h1>
+          <div class="user_profile">
+            <div class="inner-pi-one">
+              <div class="user-image-box">
+                <% if (user.profile_image) { %>
+                <img
+                  class="user-image"
+                  src="/uploads/<%= user.profile_image %>"
+                  alt="Profile Image"
+                />
+                <% } else { %>
+
+                <img
+                  class="user-image"
+                  src="/dimage.jpg"
+                  alt="Default Profile Image"
+                />
+                <% } %>
+              </div>
+
+              <div class="inner-pi-one-name">
+                <p><%= user.register_name %></p>
+              </div>
+            </div>
+            <div class="inner-pi-two">
+              <button
+                class="seller-button showUpdateFormButton"
+                data-userid="<%= user.id %>"
+              >
+                Contact Seller
+              </button>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </main>
+    <% } else { %>
+    <main class="home-main">
+      <div class="outer-box">
+        <% if (filteredUsers.length > 0) { %> <% filteredUsers.forEach(user => {
+        %>
+        <div class="user-box">
+          <img
+            class="item_image"
+            src="/uploads/<%= user.image %>"
+            alt="image"
+          />
+          <h2><%= user.name %></h2>
+          <h1>$<%= user.price %></h1>
+          <div class="user_profile">
+            <div class="inner-pi-one">
+              <div class="user-image-box">
+                <% if (user.profile_image) { %>
+                <img
+                  class="user-image"
+                  src="/uploads/<%= user.profile_image %>"
+                  alt="Profile Image"
+                />
+                <% } else { %>
+
+                <img
+                  class="user-image"
+                  src="/dimage.jpg"
+                  alt="Default Profile Image"
+                />
+                <% } %>
+              </div>
+
+              <div class="inner-pi-one-name">
+                <p><%= user.register_name %></p>
+              </div>
+            </div>
+            <div class="inner-pi-two">
+              <button
+                class="seller-button showUpdateFormButton"
+                data-userid="<%= user.id %>"
+              >
+                Contact Seller
+              </button>
+            </div>
+          </div>
+        </div>
+        <% }) %> <% } else { %> <% } %>
+      </div>
+    </main>
+
+    <% } %> <% users.forEach(user => { %>
+
+    <div
+      id="popupUpdateFormContainer_<%= user.id %>"
+      class="popupUpdateFormContainer"
+    >
+      <div class="updatebox">
+        <div class="inner-updatebox">
+          <h1 class="login-title">Contact Seller</h1>
+
+          <form action="/inbox" method="POST">
+            <input type="hidden" name="userid" value="<%= user.id %>" />
+            <input
+              class="login-email"
+              type="text"
+              name="buyername"
+              placeholder="Enter your name"
+              required
+            />
+            <input
+              class="login-email"
+              type="email"
+              name="buyeremail"
+              placeholder="Enter your email"
+              required
+            />
+            <input
+              class="login-email"
+              type="number"
+              name="buyerprice"
+              placeholder="Enter your final offer"
+              step="0.01"
+              oninput="limitPriceLength(this)"
+              required
+            />
+            <button class="login-button" type="submit">Submit</button>
+            <button class="login-register closeUpdateButton">Close</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <% }) %>
+
+    <script>
+      var updateButtonElements = document.querySelectorAll(
+        ".showUpdateFormButton"
+      );
+
+      updateButtonElements.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var userId = button.getAttribute("data-userid");
+          var popupUpdateFormContainer = document.getElementById(
+            "popupUpdateFormContainer_" + userId
+          );
+          if (popupUpdateFormContainer) {
+            popupUpdateFormContainer.style.display = "block";
+
+            var closeUpdateButton = popupUpdateFormContainer.querySelector(
+              "button.closeUpdateButton"
+            );
+
+            closeUpdateButton.addEventListener("click", function (event) {
+              event.preventDefault();
+              popupUpdateFormContainer.style.display = "none";
+            });
+
+            window.addEventListener("click", function (event) {
+              if (event.target == popupUpdateFormContainer) {
+                event.preventDefault();
+                popupUpdateFormContainer.style.display = "none";
+              }
+            });
+          }
+        });
+      });
+
+      function limitPriceLength(input) {
+        if (input.value.length > 7) {
+          input.value = input.value.slice(0, 7);
+        }
+      }
+    </script>
+  </body>
+</html>

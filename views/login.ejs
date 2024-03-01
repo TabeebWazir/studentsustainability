@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="loginbox">
+    <header class="header">
+      <div class="header-search">
+        <h1 class="header-title">S3</h1>
+      </div>
+
+      <nav class="nav-box">
+        <a href="/">Home</a>
+        <a class="active" href="/login">Login</a>
+      </nav>
+    </header>
+
+    <main class="inner-loginbox">
+      <h1 class="login-title">Login</h1>
+      <form class="login-form" method="POST" action="/login">
+        <input
+          class="login-email"
+          type="email"
+          name="email"
+          placeholder="Enter Email"
+          required
+        />
+        <input
+          class="login-password"
+          type="password"
+          name="password"
+          placeholder="Enter Password"
+          required
+        />
+        <button class="login-button" type="submit" name="loginButton">
+          Login
+        </button>
+      </form>
+      <a href="/register" class="login-a"
+        ><button class="login-register">Register</button></a
+      >
+    </main>
+  </body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-search">
+        <h1 class="header-title">S3</h1>
+      </div>
+
+      <nav class="nav-box">
+        <a href="/">Home</a>
+        <% if (isLoggedIn) { %>
+        <a class="active" href="/inventory">Inventory</a>
+        <a href="/inbox">Inbox</a>
+        <% } %> <% if (!isLoggedIn) { %>
+        <a href="/login">Login</a>
+        <% } %>
+      </nav>
+    </header>
+
+    <% if (isLoggedIn) { %>
+
+    <div id="popupAddFormContainer" class="popupAddFormContainer">
+      <div class="addbox">
+        <div class="inner-addbox">
+          <h1 class="login-title">Add Item</h1>
+          <form
+            class="login-form"
+            action="/submit"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <input
+              class="login-email"
+              type="text"
+              name="name"
+              placeholder="Enter item name"
+              required
+            />
+            <input
+              class="login-email"
+              type="number"
+              name="price"
+              placeholder="Enter item price"
+              step="0.01"
+              oninput="limitPriceLength(this)"
+              required
+            />
+            <div class="change-image">
+              Add Image
+              <input
+                class="hide-file"
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+              />
+            </div>
+
+            <button class="login-button" type="submit">Submit</button>
+          </form>
+          <button class="login-register" id="closeAddButton">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="addButton" id="showAddFormButton"><h3>+</h3></button>
+    <mai class="home-main">
+      <div class="outer-box">
+        <% } %> <% if (isLoggedIn) { %> <% users.forEach(user => { %>
+
+        <div class="user-box">
+          <img
+            class="item_image"
+            src="/uploads/<%= user.image %>"
+            alt="<%= user.name %>"
+          />
+          <h2><%= user.name %></h2>
+          <h1>$<%= user.price %></h1>
+
+          <div
+            id="popupUpdateFormContainer_<%= user.id %>"
+            class="popupUpdateFormContainer"
+          >
+            <div class="updatebox">
+              <div class="inner-updatebox">
+                <h1 class="login-title">Update Item</h1>
+                <form
+                  action="/update"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  <input type="hidden" name="userId" value="<%= user.id %>" />
+                  <input
+                    class="login-email"
+                    type="text"
+                    name="name"
+                    placeholder="Change item name"
+                  />
+                  <input
+                    class="login-email"
+                    type="number"
+                    name="price"
+                    placeholder="Change item price"
+                    step="0.01"
+                    oninput="limitPriceLength(this)"
+                  />
+                  <div class="change-image">
+                    Add New Image
+                    <input
+                      class="hide-file"
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                    />
+                  </div>
+
+
+
+                  
+
+                  <button class="login-button" type="submit">Update</button>
+                  <button class="login-register closeUpdateButton">
+                    Close
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+
+          <button
+            class="login-button showUpdateFormButton"
+            data-userid="<%= user.id %>"
+          >
+            Update
+          </button>
+
+          <form action="/delete" method="POST">
+            <input type="hidden" name="itemId" value="<%= user.id %>" />
+            <button class="login-register" type="submit">Delete</button>
+          </form>
+        </div>
+
+        <% }) %>
+      </div>
+      <% } else { %>
+      <p>Please <a href="/login">login</a> to view your inventory.</p>
+      <% } %>
+    </main>
+    <script>
+      document
+        .getElementById("showAddFormButton")
+        .addEventListener("click", function () {
+          document.getElementById("popupAddFormContainer").style.display =
+            "block";
+        });
+
+      var closeAddButton = document.getElementById("closeAddButton");
+
+      closeAddButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("popupAddFormContainer").style.display = "none";
+      });
+
+      window.addEventListener("click", function (event) {
+        if (event.target == document.getElementById("popupAddFormContainer")) {
+          document.getElementById("popupAddFormContainer").style.display =
+            "none";
+        }
+      });
+
+      var updateButtonElements = document.querySelectorAll(
+        ".showUpdateFormButton"
+      );
+
+      updateButtonElements.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var userId = button.getAttribute("data-userid");
+          var popupUpdateFormContainer = document.getElementById(
+            "popupUpdateFormContainer_" + userId
+          );
+          if (popupUpdateFormContainer) {
+            popupUpdateFormContainer.style.display = "block";
+
+            var closeUpdateButton = popupUpdateFormContainer.querySelector(
+              "button.closeUpdateButton"
+            );
+
+            closeUpdateButton.addEventListener("click", function (event) {
+              event.preventDefault();
+              popupUpdateFormContainer.style.display = "none";
+            });
+
+            window.addEventListener("click", function (event) {
+              if (event.target == popupUpdateFormContainer) {
+                event.preventDefault(); // Prevent the default form submission behavior
+                popupUpdateFormContainer.style.display = "none"; // Hide the popup
+              }
+            });
+          }
+        });
+      });
+
+      function limitPriceLength(input) {
+    if (input.value.length > 7) {
+        input.value = input.value.slice(0, 7);
+    }
+}
+
+    </script>
+  </body>
+</html>
