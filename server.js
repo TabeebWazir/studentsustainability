@@ -4,7 +4,7 @@ const mysql = require("mysql2");
 const multer = require("multer");
 const path = require("path");
 const dotenv = require("dotenv");
-const session = require("express-session");
+const session = require("cookie-session");
 const bcrypt = require("bcrypt");
 
 dotenv.config();
